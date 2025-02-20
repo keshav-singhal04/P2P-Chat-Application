@@ -52,7 +52,7 @@ A dedicated listener thread is used to receive messages in real-time, which keep
 ## Customizations
 
 ### 1. Response Time Limit
-The program is based on a synchronous networking model. By default, it assumes a maximum time limit of 30 seconds for sending a message over the network. This limit can be adjusted in the `settimeout()` method inside the `send_message()` function.  
+The program is based on a synchronous networking model. By default, it assumes a maximum time limit of 20 seconds for sending a message over the network. This limit can be adjusted in the `settimeout()` method inside the `send_message()` function.  
 
 ### 2. Mandatory Peer List
 The program initializes a list of already known peers and sends a greeting message to all of them at startup. The contents of the `mandatory_peers` list can be adjusted to include more mandatory peers.  
@@ -64,7 +64,7 @@ The program initializes a list of already known peers and sends a greeting messa
 3. Run the Python file in a code editor like `Visual Studio Code`. In the output terminal, enter your name and a port number (say 8080) to display the menu of available options.
 4. In order to run multiple instances in different terminals on your device, open the file in `Visual Studio Code` and for each instance,  press `Ctrl+F5`  to run the code in a new terminal.
 5. While running multiple instances, ensure different port numbers for each terminal. To send a message from one terminal to another on the same device, you can enter the recipient IP Address as `127.0.0.1` (local device)
-6. In order to terminate the program, enter 0 the choice
+6. If running the code on different devices, ensure that the devices are on the same network. There seems to be some issue with the code compatibility on IIT Wi-Fi networks. Hence, using a personal hotspot network is highly recommended.
 ## Acknowledgement  
 - Prof. Subhra Mazumdar, for the project idea and concepts of peer-to-peer networks.  
 - A helpful documentation of socket programming at [GeeksforGeeks](https://www.geeksforgeeks.org/socket-programming-python/).  
