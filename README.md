@@ -1,4 +1,5 @@
 
+
 # Peer-to-Peer Chat Application
 ## Team Details
 
@@ -13,9 +14,9 @@
 ## Overview
 This repository contains a Python implementation of a peer-to-peer  chat application which enables users to send and receive messages simultaneously, connect with multiple peers, and query active peers.
   
-We have assumed fixed port numbers for all users (which they are asked to enter at startup) in order to avoid repeated entries for the same peer. The project has been developed using TCP sockets to ensure reliable communication between peers. 
+We have assumed fixed port numbers for all users (which they are asked to enter at startup) in order to avoid repeated entries for the same peer. The project has been developed using TCP sockets and a standardized message format to ensure reliable communication between peers. 
 
-Our code also <b>handles the bonus question</b> by allowing users to connect to those active peers with whom connection has not yet been established
+Our code also <b>handles the bonus question</b> by allowing users to connect to those active peers with whom connection has not yet been established.
 
 ---
 ![Data flow chart at the user's end](FlowChart.png)
@@ -62,9 +63,10 @@ The program initializes a list of already known peers and sends a greeting messa
 1. The program requires you to have Python 3.7.0 or any above version installed on your device.
 2. The Python installation directory must be added to the system's `PATH` environment variable.
 3. Run the Python file in a code editor like `Visual Studio Code`. In the output terminal, enter your name and a port number (say 8080) to display the menu of available options.
-4. In order to run multiple instances in different terminals on your device, open the file in `Visual Studio Code` and for each instance,  press `Ctrl+F5`  to run the code in a new terminal.
-5. While running multiple instances, ensure different port numbers for each terminal. To send a message from one terminal to another on the same device, you can enter the recipient IP Address as `127.0.0.1` (local device)
-6. If running the code on different devices, ensure that the devices are on the same network. There seems to be some issue with the code compatibility on IIT Wi-Fi networks. Hence, using a personal hotspot network is highly recommended.
+4. In order to run multiple instances in different terminals on your device, open the file in `Visual Studio Code` and for each instance,  press `Ctrl+F5`  to run the code in a new terminal. Make sure to use different port numbers for each terminal. 
+6. To send a message from one terminal to another on the same device, you can enter the recipient IP Address as either `127.0.0.1` (local device) or the actual IP address. Avoid using both simultaneously since the program would assume the two IP addresses as different.
+7. If running the code on different devices, ensure that the devices are on the same network without any VPN. There seems to be some issue with the code compatibility on IIT Wi-Fi networks. Hence, using a personal hotspot network is highly recommended.
+
 ## Acknowledgement  
 - Prof. Subhra Mazumdar, for the project idea and concepts of peer-to-peer networks.  
 - A helpful documentation of socket programming at [GeeksforGeeks](https://www.geeksforgeeks.org/socket-programming-python/).  
