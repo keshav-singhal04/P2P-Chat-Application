@@ -1,4 +1,4 @@
-import socket, threading, json, time
+import socket, threading, time
 
 active_peers = []
 known_peers = set()
@@ -15,18 +15,25 @@ def listen(port, name):
     print(f"\nServer listening on port {port}\n")
     while True:
         client_socket, addr = server_socket.accept()
-        threading.Thread(target=receive_message, args=(client_socket, addr, name)).start()
+        threading.Thread(target=receive_message, args=(client_socket, name), daemon=True).start()
 
-def receive_message(client_socket, addr, name):
+def receive_message(client_socket, name):
     try:
         data = client_socket.recv(1024).decode()
         if not data:
             return
-        message = json.loads(data)
-        sender_ip = addr[0]
-        sender_port = message['sender_port']
-        sender_name = message.get('sender_name', 'Unknown')
-        content = message['content']
+
+        parts = data.split(" ", 2)
+        if len(parts) < 3:
+            return
+
+        sender_address_str, sender_name, content = parts
+        try:
+            sender_ip, sender_port_str = sender_address_str.split(":")
+            sender_port = int(sender_port_str)
+        except ValueError:
+            return
+
         with lock:
             peer_names[(sender_ip, sender_port)] = sender_name
             if content.lower() == 'exit':
@@ -39,6 +46,7 @@ def receive_message(client_socket, addr, name):
                     active_peers.append((sender_ip, sender_port))
                     print(f"\n\nNew peer found: {sender_name} [{sender_ip}:{sender_port}]")
                 known_peers.add((sender_ip, sender_port))
+                
         if content.lower() == 'exit':
             print(f"\n{sender_name} [{sender_ip}:{sender_port}] disconnected\n")
         elif content.lower() == 'connect':
@@ -49,18 +57,18 @@ def receive_message(client_socket, addr, name):
         client_socket.close()
 
 def send_message(ip, port, sender_name, sender_port, message):
+    try:
+        sender_ip = socket.gethostbyname(socket.gethostname())
+    except Exception:
+        sender_ip = "0.0.0.0"
+        
+    data = f"{sender_ip}:{sender_port} {sender_name} {message}"
     with lock:
         remote_name = peer_names.get((ip, port), "Unknown")
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(20)
             s.connect((ip, port))
-            data = json.dumps({
-                'type': 'message',
-                'sender_name': sender_name,
-                'sender_port': sender_port,
-                'content': message
-            })
             s.send(data.encode())
         with lock:
             if message.lower() == 'exit':
@@ -77,9 +85,9 @@ def send_message(ip, port, sender_name, sender_port, message):
         elif message.lower() == 'exit':
             print(f"Disconnected from {remote_name} [{ip}:{port}]")
         else:
-            print(f"Message sent to {remote_name} [{ip}:{port}]:",message)
+            print(f"Message sent to {remote_name} [{ip}:{port}]:", message)
         return True
-    except:
+    except Exception:
         print(f"Failed to contact {remote_name} [{ip}:{port}]")
         return False
 
@@ -90,7 +98,14 @@ def connect(ip, port_peer, sender_name, sender_port):
             connected_peers.add((ip, port_peer))
 
 def main():
-    name = input("Enter your name: ")
+
+    while True:
+        name = input("Enter your name (without spaces): ")
+        words=name.split()
+        if len(words)==1:
+            break
+        print("\nThe entered name contains spaces\n")
+        
     port = int(input("Enter your port number: "))
     server = threading.Thread(target=listen, args=(port, name), daemon=True)
     server.start()
@@ -99,7 +114,7 @@ def main():
         peer_names[('10.206.5.228', 6555)] = "Ma'am"
     mandatory_threads = []
     for ip, peer_port in mandatory_peers:
-        t = threading.Thread(target=send_message, args=(ip, peer_port, name, port, f"Hello!"))
+        t = threading.Thread(target=send_message, args=(ip, peer_port, name, port, "Hello!"))
         t.start()
         mandatory_threads.append(t)
     for t in mandatory_threads:
