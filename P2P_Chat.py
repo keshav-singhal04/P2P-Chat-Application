@@ -67,7 +67,7 @@ def send_message(ip, port, sender_name, sender_port, message):
         remote_name = peer_names.get((ip, port), "Unknown")
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.settimeout(20)
+            s.settimeout(15)
             s.connect((ip, port))
             s.send(data.encode())
         with lock:
