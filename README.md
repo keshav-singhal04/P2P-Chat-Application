@@ -80,7 +80,7 @@ Enter your port number: 8080
 
 Server listening on port 8080
 
-Message sent to Ma'am [10.206.5.228:6555]: Hello!
+Message sent to Ma'am [10.206.5.228:6555]: Hello Ma'am!
 
 ***** Menu *****
 1. Send message
@@ -91,9 +91,9 @@ Enter choice: 1
 
 Enter recipient's IP address: 10.18.4.39
 Enter recipient's port number: 9090
-Enter your message (type exit to disconnect): Let's connect
+Enter your message (type exit to disconnect): Let us connect
 
-Message sent to Unknown [10.18.4.39:9090]: Let's connect
+Message sent to Unknown [10.18.4.39:9090]: Let us connect
 ```
 
 ---
